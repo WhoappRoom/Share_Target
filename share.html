@@ -1,68 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shared Data</title>
-    <link rel="icon" href="/logo.png">
-    <link rel="manifest" href="/manifest.json">
-    <style>
-      body {
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        display: flex;
-        background-color: #333;
-        color: #fff;
-        font-family: Arial, sans-serif;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shared Data</title>
+  <link rel="icon" href="/logo.png">
+  <link rel="manifest" href="/manifest.json">
+  <style>
+    body {
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      display: flex;
+      background-color: #333;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="shared-data">
+    <h1>Received Shared Data</h1>
+    <p id="title"></p>
+    <p id="text"></p>
+    <p id="url"></p>
+  </div>
+
+  <script>
+    async function handleSharedData() {
+      try {
+        // Use Fetch API to get the POST data
+        const response = await fetch('/share.html', {
+          method: 'POST',
+          body: new FormData(document.querySelector('form'))
+        });
+        const data = await response.json();
+
+        // Display the shared data
+        document.getElementById('title').textContent = `Title: ${data.title}`;
+        document.getElementById('text').textContent = `Text: ${data.text}`;
+        document.getElementById('url').textContent = `URL: ${data.url}`;
+      } catch (error) {
+        console.error('Error handling shared data:', error);
       }
-    </style>
-  </head>
-  <body>
-    <div id="shared-data">
-      <h1>Received Shared Data</h1>
-      <p id="title"></p>
-      <p id="text"></p>
-      <p id="url"></p>
-    </div>
+    }
 
-    <script>
-      // Function to extract and display the shared data
-      async function handleSharedData() {
-        try {
-          if ('launchQueue' in window && 'files' in DataTransfer.prototype) {
-            launchQueue.setConsumer(async (launchParams) => {
-              if (!launchParams.files.length) return;
-
-              // Fetch the shared data
-              const formData = new FormData();
-              for (const file of launchParams.files) {
-                formData.append(file.name, file);
-              }
-
-              const title = formData.get('title');
-              const text = formData.get('text');
-              const url = formData.get('url');
-
-              // Display the shared data
-              document.getElementById('title').textContent = `Title: ${title}`;
-              document.getElementById('text').textContent = `Text: ${text}`;
-              document.getElementById('url').textContent = `URL: ${url}`;
-
-              alert('Shared Title:', title);
-              alert('Shared Text:', text);
-              alert('Shared URL:', url);
-            });
-          } else {
-            alert('No shared data available or unsupported browser. ');
-          }
-        } catch (error) {
-          alert('Error handling shared data:', error);
-        }
-      }
-
-      // Call the function when the page loads
-      window.addEventListener('load', handleSharedData);
-    </script>
-  </body>
+    // Call the function when the page loads
+    window.addEventListener('load', handleSharedData);
+  </script>
+</body>
 </html>
