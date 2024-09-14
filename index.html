@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Share Target</title>
+    <link rel="icon" href="logo.png">
+    <link rel="manifest" href="manifest.json">
+    <style>
+      body{
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        display: flex;
+        background-color: #333;
+      }
+      button{
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        padding: 15px 30px;
+        border-radius: 30px;
+        background-color: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <button id="share">Share</button>
+    </div>
+    <script>
+      document.getElementById('share').addEventListener('click', function () {
+        navigator.share({
+          title: 'Share target',
+          text: 'Test share target',
+          url: 'https://ninyaaban.site/'
+        })
+      })
+    </script>
+  </body>
+</html>
